@@ -1,3 +1,8 @@
-.feedList--child{
+.feedList{
+    &__child{
     width:24%;
+    border: 1px solid;
+    }
+
 }
+

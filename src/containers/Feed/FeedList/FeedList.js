@@ -4,7 +4,7 @@ import FeedElement from './FeedElement/FeedElement';
 import './FeedList.scss';
 
 const FeedList = (props) => (
-    <div className="feedList--wrapper">
+    <article className="feedList">
         {props.listOfMatches.map((match) =>{
             const killDeathRatio = match.deaths - match.kills;
             return <FeedElement 
@@ -14,7 +14,7 @@ const FeedList = (props) => (
                 ratio={killDeathRatio}
             />    
         })}
-    </div>
+    </article>
 );
 
 export default FeedList;

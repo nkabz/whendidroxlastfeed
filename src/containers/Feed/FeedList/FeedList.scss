@@ -1,8 +1,9 @@
-.feedList--wrapper{
+.feedList{
     display: flex;
     height: 100%;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
+    align-content: space-around;
     align-items: center;
     text-align: center;
 }
