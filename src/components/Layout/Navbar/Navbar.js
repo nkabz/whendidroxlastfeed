@@ -6,9 +6,6 @@ const Navbar = () => (
         <nav>
             
         </nav>
-        <div className="line">
-
-        </div>
     </React.Fragment>
 );
 
