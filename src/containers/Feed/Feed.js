@@ -67,6 +67,7 @@ class Feed extends Component {
             console.log(this.state.highlight)
             feedHighlight=<FeedHighlight matchToHighlight={this.state.highlight}/>
             feedList = <FeedList
+                
                 listOfMatches={this.state.feedList}
             />
         }
