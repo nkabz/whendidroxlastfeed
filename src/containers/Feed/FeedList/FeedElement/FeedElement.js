@@ -1,9 +1,12 @@
 import React from 'react';
-
-const FeedElement = (props) => (
-    <li>
-        {props}
-    </li>
-);
+import './FeedElement.scss';
+const FeedElement = (props) => {
+    return (
+    <h2 className="feedList--child">
+        <strong>{props.deaths}</strong> deaths.
+    </h2>
+    
+    )
+};
 
 export default FeedElement;

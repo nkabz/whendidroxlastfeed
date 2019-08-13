@@ -1,14 +1,18 @@
 import React from 'react';
 import FeedElement from './FeedElement/FeedElement';
 
+import './FeedList.scss';
+
 const FeedList = (props) => (
-    <ul>
-        {props.map((match) =>(
+    <div className="feedList--wrapper">
+        {props.listOfMatches.map((match) =>(
             <FeedElement 
-                
+                hero={match.heroName}
+                kills={match.kills}
+                deaths={match.deaths}
             />    
         ))}
-    </ul>
+    </div>
 );
 
 export default FeedList;

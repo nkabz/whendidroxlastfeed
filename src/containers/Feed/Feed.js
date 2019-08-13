@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import axios from '../../AxiosOpenApi';
-// import FeedHighlight from './FeedList/FeedHighlight'
-// import FeedList from './FeedList/FeedList'
+import FeedHighlight from './FeedHighlight/FeedHighlight';
+import FeedList from './FeedList/FeedList';
+import Spinner from '../../components/Layout/UI/Spinner/Spinner';
 
 class Feed extends Component {
     
@@ -32,13 +33,16 @@ class Feed extends Component {
             const fetchedFeedList = results[0].data.reduce((result, curEl, curIndex) => {
                 if(curEl['deaths'] - curEl['kills'] > 5)
                 {
-                    if(curEl['deaths'] - curEl['kills'] >= worstValue || worstValue === null)
-                        worstValue = curEl;
                     let nameOfHero = results[1].data.filter(
                         function(hero){
                             return hero['id'] === curEl['hero_id']
                         }
                     );
+                    if(curEl['deaths'] - curEl['kills'] >= worstValue || worstValue === null)
+                    {
+                        worstValue = curEl;
+                        worstValue.heroName = nameOfHero[0]['localized_name'];
+                    }
                     result.push({
                         kills: curEl['kills'],
                         deaths: curEl['deaths'],
@@ -54,11 +58,22 @@ class Feed extends Component {
         });
 
     }
+    
     render() {
+        let feedList = <Spinner />
+        let feedHighlight = null;
+        if(this.state.feedList !== null)
+        {
+            console.log(this.state.highlight)
+            feedHighlight=<FeedHighlight matchToHighlight={this.state.highlight}/>
+            feedList = <FeedList
+                listOfMatches={this.state.feedList}
+            />
+        }
         return (
             <React.Fragment>
-                {/* <FeedList />
-                <FeedHighlight /> */}
+                {feedHighlight}
+                {feedList}
             </React.Fragment>
         );
     }
