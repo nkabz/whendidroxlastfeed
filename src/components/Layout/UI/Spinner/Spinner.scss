@@ -3,12 +3,13 @@
     position: relative;
     width: 64px;
     height: 64px;
+    left: 46%;
   }
   .lds-default div {
     position: absolute;
     width: 5px;
     height: 5px;
-    background: #fff;
+    background: rgb(109, 0, 76);
     border-radius: 50%;
     animation: lds-default 1.2s linear infinite;
   }
