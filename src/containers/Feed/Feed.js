@@ -3,6 +3,7 @@ import axios from '../../AxiosOpenApi';
 import FeedHighlight from './FeedHighlight/FeedHighlight';
 import FeedList from './FeedList/FeedList';
 import Spinner from '../../components/Layout/UI/Spinner/Spinner';
+import heroes from '../../data/heroes.json'
 
 class Feed extends Component {
     
@@ -14,26 +15,27 @@ class Feed extends Component {
     }
     
     getMatches(){
+        
         return axios.get('/players/' + this.state.accountId + '/matches?limit=50');
+        
     }
-
     getHeroes(){
-        return axios.get('/heroes');
+        return heroes;
     }
 
     componentDidMount() {
-
         Promise.all([
             this.getMatches(),
             this.getHeroes()
             
         ])
         .then((results) => {
+            console.log(results[1]);
             let worstValue = null;
             const fetchedFeedList = results[0].data.reduce((result, curEl, curIndex) => {
                 if(curEl['deaths'] - curEl['kills'] > 5)
                 {
-                    let nameOfHero = results[1].data.filter(
+                    let nameOfHero = results[1].heroes.filter(
                         function(hero){
                             return hero['id'] === curEl['hero_id']
                         }
