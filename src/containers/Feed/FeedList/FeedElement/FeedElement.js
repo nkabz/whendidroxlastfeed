@@ -12,7 +12,7 @@ const FeedElement = (props) => {
             Also had {props.kills} kills.
         </p>
         <p className="feedList__net">
-            Net Value: -<strong> {props.ratio} </strong>
+            Net Value: <strong> -{props.ratio} </strong>
         </p>
     </div>
     )
