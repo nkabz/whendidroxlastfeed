@@ -30,7 +30,6 @@ class Feed extends Component {
             
         ])
         .then((results) => {
-            console.log(results[1]);
             let worstValue = null;
             const fetchedFeedList = results[0].data.reduce((result, curEl, curIndex) => {
                 if(curEl['deaths'] - curEl['kills'] > 5)
@@ -40,10 +39,20 @@ class Feed extends Component {
                             return hero['id'] === curEl['hero_id']
                         }
                     );
-                    if(curEl['deaths'] - curEl['kills'] >= worstValue || worstValue === null)
+
+                    if(worstValue === null)
                     {
                         worstValue = curEl;
                         worstValue.heroName = nameOfHero[0]['localized_name'];
+                        worstValue.netRatio = curEl['deaths'] - curEl['kills'];                       
+                    } else {
+                        if(curEl['deaths'] - curEl['kills'] >= worstValue.netRatio)
+                        {
+                            worstValue = curEl;
+                            worstValue.heroName = nameOfHero[0]['localized_name'];
+                            worstValue.netRatio = curEl['deaths'] - curEl['kills'];
+
+                        }
                     }
                     result.push({
                         kills: curEl['kills'],
