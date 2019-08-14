@@ -8,12 +8,16 @@ const FeedElement = (props) => {
         <h2 className="feedList__deaths">
             <strong>{props.deaths}</strong> deaths.
         </h2>
+        <div className="feedList__imgContainer">
+            <img src={props.imgUrl} alt={props.hero}/>
+        </div>
         <p className="feedList__kills">
             Also had {props.kills} kills.
         </p>
         <p className="feedList__net">
             Net Value: <strong className=""> -{props.ratio} </strong>
         </p>
+        
     </div>
     )
 };

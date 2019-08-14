@@ -23,6 +23,21 @@ class Feed extends Component {
         return heroes;
     }
 
+    getFetchedHighlight(currentElement, heroName, netRatio){
+        return {
+            ...currentElement,
+            heroName: heroName['localized_name'],
+            heroImgUrl: heroName['url_vertical_portrait'],
+            netRatio: netRatio
+        };
+    }
+    
+    updateNewHighlight(curFetchedHighlight, heroName, netRatio, curEl){
+        if(curFetchedHighlight.netRatio <= netRatio)
+            return this.getFetchedHighlight(curEl, heroName, netRatio)
+        return curFetchedHighlight;
+    }
+
     componentDidMount() {
         Promise.all([
             this.getMatches(),
@@ -30,39 +45,33 @@ class Feed extends Component {
             
         ])
         .then((results) => {
-            let worstValue = null;
-            const fetchedFeedList = results[0].data.reduce((result, curEl, curIndex) => {
-                if(curEl['deaths'] - curEl['kills'] > 5)
+            let fetchedHighlight = null;
+            const fetchedFeedList = results[0].data.reduce((result, curEl, curIndex) => 
+            {  
+                let ratioKillDeath = curEl['deaths'] - curEl['kills']
+
+                if(ratioKillDeath > 5)
                 {
                     let nameOfHero = results[1].heroes.filter(
                         function(hero){
                             return hero['id'] === curEl['hero_id']
                         }
                     );
-
-                    if(worstValue === null)
-                    {
-                        worstValue = curEl;
-                        worstValue.heroName = nameOfHero[0]['localized_name'];
-                        worstValue.netRatio = curEl['deaths'] - curEl['kills'];                       
-                    } else {
-                        if(curEl['deaths'] - curEl['kills'] >= worstValue.netRatio)
-                        {
-                            worstValue = curEl;
-                            worstValue.heroName = nameOfHero[0]['localized_name'];
-                            worstValue.netRatio = curEl['deaths'] - curEl['kills'];
-
-                        }
-                    }
+                    fetchedHighlight = (fetchedHighlight === null) ? 
+                        this.getFetchedHighlight({...curEl},nameOfHero[0],ratioKillDeath) :
+                        this.updateNewHighlight({...fetchedHighlight}, nameOfHero[0],ratioKillDeath,{...curEl})    
+ 
                     result.push({
                         kills: curEl['kills'],
                         deaths: curEl['deaths'],
-                        heroName: nameOfHero[0]['localized_name']
+                        heroName: nameOfHero[0]['localized_name'],
+                        matchid: curEl['match_id'],
+                        heroImgUrl: nameOfHero[0]['url_vertical_portrait']
                     })
                 }
                 return result;
             }, []);
-                this.setState({feedList: fetchedFeedList, highlight: worstValue})
+                this.setState({feedList: fetchedFeedList, highlight: fetchedHighlight})
         })
         .catch((err) => {
             console.log(err);
@@ -75,10 +84,13 @@ class Feed extends Component {
         let feedHighlight = null;
         if(this.state.feedList !== null)
         {
-            console.log(this.state.highlight)
-            feedHighlight=<FeedHighlight matchToHighlight={this.state.highlight}/>
-            feedList = <FeedList
-                
+            feedHighlight = 
+            <FeedHighlight
+                matchToHighlight={this.state.highlight}
+            />
+
+            feedList = 
+            <FeedList
                 listOfMatches={this.state.feedList}
             />
         }
